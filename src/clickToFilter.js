@@ -2,9 +2,7 @@ const { log } = require("./log.js");
 const { injectStyle } = require("./hideElements.js");
 
 function getProfileImages() {
-  return document.querySelectorAll(
-    'tr img[jid]:not([jid=""]):not([data-wrapped])',
-  );
+  return document.querySelectorAll('tr img[jid]:not([jid=""])');
 }
 
 function wrapImageWithSubjectLink(img) {
@@ -34,7 +32,6 @@ function wrapImageCommon(img, searchUrl) {
   }
 
   log("WRAP", searchUrl);
-  img.setAttribute("data-wrapped", "true");
   anchor.href = searchUrl;
   if (mustInsert) {
     img.parentNode.insertBefore(anchor, img);
@@ -44,9 +41,9 @@ function wrapImageCommon(img, searchUrl) {
 
 function addProfileHover() {
   injectStyle(`
-    a > img[jid]:hover {
-      box-shadow: 0 0 5px 4px rgba(0, 255, 0, 1);
-      cursor: pointer;
+    img[jid]:hover {
+      box-shadow: 0 0 5px 4px rgba(0, 255, 0, 1) !important;
+      cursor: pointer !important;
     }
   `);
 }
