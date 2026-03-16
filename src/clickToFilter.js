@@ -1,8 +1,8 @@
 const { log } = require("./log.js");
+const { injectStyle } = require("./hideElements.js");
 
 function getProfileImages() {
-  const images = document.querySelectorAll('img[jid]:not([jid=""])');
-  return images;
+  return document.querySelectorAll('tr img[jid]:not([jid=""]):not([data-wrapped])');
 }
 
 function wrapImageWithSubjectLink(img) {
@@ -32,6 +32,7 @@ function wrapImageCommon(img, searchUrl) {
   }
 
   log("WRAP", searchUrl);
+  img.setAttribute("data-wrapped", "true");
   anchor.href = searchUrl;
   if (mustInsert) {
     img.parentNode.insertBefore(anchor, img);
@@ -39,24 +40,56 @@ function wrapImageCommon(img, searchUrl) {
   }
 }
 
-// Add CSS rule for clickable profile images
 function addProfileHover() {
-  const style = document.createElement("style");
-  style.textContent = `
-    img[jid] {
-        box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.8);
-        transition: box-shadow 0.1s ease;
+  injectStyle(`
+    a > img[jid]:hover {
+      box-shadow: 0 0 5px 4px rgba(0, 255, 0, 1);
+      cursor: pointer;
     }
-    img[jid]:hover {
-        box-shadow: 0 0 5px 4px rgba(0, 255, 0, 1);
-        cursor: pointer;
+  `);
+}
+
+let senderNameClickRegistered = false;
+
+function addSenderNameClickToFilter() {
+  if (senderNameClickRegistered) return;
+  senderNameClickRegistered = true;
+
+  injectStyle(`
+    td.yX:hover {
+      text-decoration: underline;
+      cursor: pointer;
     }
-    `;
-  document.head.appendChild(style);
+  `);
+
+  const handler = (e) => {
+    const senderCell = e.target.closest("td.yX");
+    if (!senderCell) return;
+
+    const emailSpan = senderCell.querySelector("span[email]") || e.target.closest("span[email]");
+    if (!emailSpan) return;
+
+    const email = emailSpan.getAttribute("email");
+    if (!email) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    if (e.type !== "click") return; // only navigate once
+
+    log("SENDER NAME CLICK", email);
+    window.location.hash = `#search/from%3A${encodeURIComponent(email)}`;
+  };
+
+  for (const evt of ["mousedown", "mouseup", "click"]) {
+    document.addEventListener(evt, handler, true);
+  }
 }
 
 module.exports = {
   addProfileHover,
+  addSenderNameClickToFilter,
   getProfileImages,
   wrapImageWithSubjectLink,
   wrapImageWithDomainLink,

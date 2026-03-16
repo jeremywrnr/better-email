@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Better Gmail Options</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 16px;
+        min-width: 300px;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .header h2 {
+        margin: 0;
+      }
+      #toggleAll {
+        font-size: 0.8em;
+        padding: 4px 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background: #f5f5f5;
+        cursor: pointer;
+        user-select: none;
+      }
+      #toggleAll:hover {
+        background: #e8e8e8;
+      }
+      fieldset {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 8px 14px 12px;
+        margin: 0 0 12px;
+      }
+      legend {
+        font-weight: 600;
+        font-size: 0.95em;
+        padding: 0 6px;
+      }
+      label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 8px 0 8px 4px;
+        cursor: pointer;
+      }
+      #status {
+        margin-top: 12px;
+        color: green;
+        font-size: 0.85em;
+        min-height: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h2>Better Gmail</h2>
+      <button id="toggleAll">Disable All</button>
+    </div>
+
+    <fieldset>
+      <legend>Click to filter</legend>
+      <label><input type="checkbox" id="domainMode" /> Alt/Meta switches to domain filter</label>
+      <label><input type="checkbox" id="clickToFilter" /> Click profile image to filter by sender</label>
+      <label><input type="checkbox" id="profileHover" /> Highlight profile images on hover</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Hide UI elements</legend>
+      <label><input type="checkbox" id="hideEmojiReaction" /> Hide emoji reaction button</label>
+      <label><input type="checkbox" id="hideStorageUsed" /> Hide footer (storage, terms, activity)</label>
+      <label><input type="checkbox" id="hideSupportButton" /> Hide support button</label>
+      <label><input type="checkbox" id="hideGemini" /> Hide "Try Gemini" button</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Sender email</legend>
+      <label><input type="checkbox" id="alwaysShowEmail" /> Always show sender email address</label>
+      <label><input type="checkbox" id="clickToCopy" /> Click sender email to copy to clipboard</label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Spam</legend>
+      <label><input type="checkbox" id="deleteSpamButton" /> Show "Delete All Spam" button</label>
+    </fieldset>
+
+    <div id="status"></div>
+    <script src="options.js"></script>
+  </body>
+</html>

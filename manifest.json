@@ -1,16 +1,25 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Better Gmail Helper",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Extension for Gmail: in a conversation, click a subject profile image to view all conversations with that subject",
-  "permissions": ["*://mail.google.com/*"],
+  "permissions": ["storage"],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
   "icons": {
-    "128": "icons/icon-128.png"
+    "128": "media/icons/icon-128.png"
   },
   "content_scripts": [
     {
       "matches": ["https://mail.google.com/*"],
       "js": ["dist/content.bundle.js"]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "better-gmail-helper@jeremy"
+    }
+  }
 }
