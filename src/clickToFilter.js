@@ -2,7 +2,9 @@ const { log } = require("./log.js");
 const { injectStyle } = require("./hideElements.js");
 
 function getProfileImages() {
-  return document.querySelectorAll('tr img[jid]:not([jid=""])');
+  return document.querySelectorAll(
+    'tr img[jid]:not([jid=""]), .aju img[jid]:not([jid=""])',
+  );
 }
 
 function wrapImageWithSubjectLink(img) {
@@ -33,6 +35,16 @@ function wrapImageCommon(img, searchUrl) {
 
   log("WRAP", searchUrl);
   anchor.href = searchUrl;
+  anchor.addEventListener(
+    "click",
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      window.location.hash = searchUrl;
+    },
+    true,
+  );
   if (mustInsert) {
     img.parentNode.insertBefore(anchor, img);
     anchor.appendChild(img);

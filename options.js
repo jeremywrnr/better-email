@@ -8,7 +8,11 @@ const DEFAULTS = {
   hideEmojiReaction: true,
   deleteSpamButton: true,
   hideStorageUsed: true,
+  hideAIOverview: true,
+  hideFooterLinks: true,
+  hideSuggestedReplies: true,
   hideSupportButton: true,
+  autoExpandThreads: true,
 };
 
 const keys = Object.keys(DEFAULTS);

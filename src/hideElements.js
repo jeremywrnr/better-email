@@ -10,14 +10,27 @@ function hideGeminiButton() {
   );
 }
 
+function hideAIOverview() {
+  injectStyle("div.eJPjde { display: none !important; }");
+}
+
+function hideSuggestedReplies() {
+  injectStyle("div.brb { display: none !important; }");
+}
+
 function hideStorageUsed() {
-  injectStyle('[role="contentinfo"] { display: none !important; }');
+  injectStyle('a[href*="storage_meter"] { display: none !important; }');
+}
+
+function hideFooterLinks() {
+  injectStyle("div.aeU { display: none !important; }");
 }
 
 function hideEmojiReaction() {
-  injectStyle(
-    'div.wrsVRe[data-position="dynamic"] { display: none !important; }',
-  );
+  injectStyle(`
+    div.wrsVRe[data-position="dynamic"] { display: none !important; }
+    [aria-label="Add reaction"] { display: none !important; }
+  `);
 }
 
 function hideSupportButton() {
@@ -42,7 +55,10 @@ function redirectSettingsToAll() {
 module.exports = {
   injectStyle,
   hideGeminiButton,
+  hideAIOverview,
+  hideSuggestedReplies,
   hideEmojiReaction,
+  hideFooterLinks,
   hideStorageUsed,
   hideSupportButton,
   redirectSettingsToAll,

@@ -18,12 +18,17 @@ const {
 } = require("./showSenderEmail.js");
 const {
   hideGeminiButton,
+  hideAIOverview,
+  hideSuggestedReplies,
   hideEmojiReaction,
+  hideFooterLinks,
   hideStorageUsed,
   hideSupportButton,
   redirectSettingsToAll,
 } = require("./hideElements.js");
+const { expandCollapsedMessages } = require("./autoExpand.js");
 const { DEFAULTS } = require("./defaults.js");
+const { injectStyle } = require("./hideElements.js");
 
 log("Extension Loading...", window.location.href);
 
@@ -44,6 +49,8 @@ function applyClickToCopy() {
 let clickToFilterInterval;
 
 async function init() {
+  // Fix Gmail bug: sender name descenders clipped in search header
+  injectStyle(".c5 { overflow: visible !important; }");
   const settings = await browser.storage.local.get(DEFAULTS);
   log("Settings", settings);
 
@@ -93,12 +100,24 @@ async function init() {
     hideGeminiButton();
   }
 
+  if (settings.hideAIOverview) {
+    hideAIOverview();
+  }
+
+  if (settings.hideSuggestedReplies) {
+    hideSuggestedReplies();
+  }
+
   if (settings.hideEmojiReaction) {
     hideEmojiReaction();
   }
 
   if (settings.hideStorageUsed) {
     hideStorageUsed();
+  }
+
+  if (settings.hideFooterLinks) {
+    hideFooterLinks();
   }
 
   if (settings.hideSupportButton) {
@@ -109,6 +128,10 @@ async function init() {
 
   if (settings.deleteSpamButton) {
     setupSpamButton();
+  }
+
+  if (settings.autoExpandThreads) {
+    setInterval(expandCollapsedMessages, BETTER_GMAIL_TIMEOUT);
   }
 
   if (settings.alwaysShowEmail) {
