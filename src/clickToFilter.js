@@ -2,7 +2,9 @@ const { log } = require("./log.js");
 const { injectStyle } = require("./hideElements.js");
 
 function getProfileImages() {
-  return document.querySelectorAll('tr img[jid]:not([jid=""]):not([data-wrapped])');
+  return document.querySelectorAll(
+    'tr img[jid]:not([jid=""]):not([data-wrapped])',
+  );
 }
 
 function wrapImageWithSubjectLink(img) {
@@ -66,7 +68,9 @@ function addSenderNameClickToFilter() {
     const senderCell = e.target.closest("td.yX");
     if (!senderCell) return;
 
-    const emailSpan = senderCell.querySelector("span[email]") || e.target.closest("span[email]");
+    const emailSpan =
+      senderCell.querySelector("span[email]") ||
+      e.target.closest("span[email]");
     if (!emailSpan) return;
 
     const email = emailSpan.getAttribute("email");

@@ -36,8 +36,9 @@ function tryInject(attemptsLeft = 20) {
   removeButton();
 
   const link = findDeleteLink();
-  const anchor = findVisibleElement('[aria-label="More email options"]') ||
-                 findVisibleElement('[aria-label="Refresh"]');
+  const anchor =
+    findVisibleElement('[aria-label="More email options"]') ||
+    findVisibleElement('[aria-label="Refresh"]');
 
   if (!link || !anchor) {
     if (attemptsLeft > 0) setTimeout(() => tryInject(attemptsLeft - 1), 250);

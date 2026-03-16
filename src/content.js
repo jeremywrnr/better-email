@@ -16,7 +16,13 @@ const {
   getSenderSpansWithoutEmail,
   showSenderEmail,
 } = require("./showSenderEmail.js");
-const { hideGeminiButton, hideEmojiReaction, hideStorageUsed, hideSupportButton, redirectSettingsToAll } = require("./hideElements.js");
+const {
+  hideGeminiButton,
+  hideEmojiReaction,
+  hideStorageUsed,
+  hideSupportButton,
+  redirectSettingsToAll,
+} = require("./hideElements.js");
 const { DEFAULTS } = require("./defaults.js");
 
 log("Extension Loading...", window.location.href);
@@ -47,7 +53,10 @@ async function init() {
 
   if (settings.clickToFilter) {
     addSenderNameClickToFilter();
-    clickToFilterInterval = setInterval(wrapImagesSubject, BETTER_GMAIL_TIMEOUT);
+    clickToFilterInterval = setInterval(
+      wrapImagesSubject,
+      BETTER_GMAIL_TIMEOUT,
+    );
 
     if (settings.domainMode) {
       document.addEventListener("keydown", (event) => {

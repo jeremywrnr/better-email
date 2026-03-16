@@ -7,21 +7,25 @@ function getEmailSpans() {
 
 function addClickToCopy(span) {
   span.setAttribute("data-copy-enabled", "true");
-  span.addEventListener("click", async (e) => {
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    e.preventDefault();
-    const email = span.textContent.trim().replace(/^<|>$/g, "");
-    if (!email) return;
-    try {
-      await navigator.clipboard.writeText(email);
-      log("Copied", email);
-      span.setAttribute("data-copied", "true");
-      setTimeout(() => span.removeAttribute("data-copied"), 1500);
-    } catch (err) {
-      log("Copy failed", err);
-    }
-  }, { capture: true });
+  span.addEventListener(
+    "click",
+    async (e) => {
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      const email = span.textContent.trim().replace(/^<|>$/g, "");
+      if (!email) return;
+      try {
+        await navigator.clipboard.writeText(email);
+        log("Copied", email);
+        span.setAttribute("data-copied", "true");
+        setTimeout(() => span.removeAttribute("data-copied"), 1500);
+      } catch (err) {
+        log("Copy failed", err);
+      }
+    },
+    { capture: true },
+  );
 }
 
 function addClickToCopyStyle() {

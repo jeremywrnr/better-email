@@ -52,8 +52,8 @@ This produces `web-ext-artifacts/better_gmail_helper-1.1.zip`.
 
 ## Other Scripts
 
-| Command | Description |
-|---|---|
+| Command         | Description                    |
+| --------------- | ------------------------------ |
 | `npm run check` | Check formatting with Prettier |
-| `npm run fix` | Auto-fix formatting |
-| `npm run clean` | Remove build artifacts |
+| `npm run fix`   | Auto-fix formatting            |
+| `npm run clean` | Remove build artifacts         |

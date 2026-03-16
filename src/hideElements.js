@@ -5,7 +5,9 @@ function injectStyle(css) {
 }
 
 function hideGeminiButton() {
-  injectStyle('[data-rp-placement-id="gemkick-pep-icon-callout-id"] { display: none !important; }');
+  injectStyle(
+    '[data-rp-placement-id="gemkick-pep-icon-callout-id"] { display: none !important; }',
+  );
 }
 
 function hideStorageUsed() {
@@ -13,7 +15,9 @@ function hideStorageUsed() {
 }
 
 function hideEmojiReaction() {
-  injectStyle('div.wrsVRe[data-position="dynamic"] { display: none !important; }');
+  injectStyle(
+    'div.wrsVRe[data-position="dynamic"] { display: none !important; }',
+  );
 }
 
 function hideSupportButton() {
@@ -21,14 +25,25 @@ function hideSupportButton() {
 }
 
 function redirectSettingsToAll() {
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest('[aria-label="Settings"]');
-    if (btn) {
-      e.preventDefault();
-      e.stopPropagation();
-      window.location.hash = "#settings/general";
-    }
-  }, true);
+  document.addEventListener(
+    "click",
+    (e) => {
+      const btn = e.target.closest('[aria-label="Settings"]');
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.hash = "#settings/general";
+      }
+    },
+    true,
+  );
 }
 
-module.exports = { injectStyle, hideGeminiButton, hideEmojiReaction, hideStorageUsed, hideSupportButton, redirectSettingsToAll };
+module.exports = {
+  injectStyle,
+  hideGeminiButton,
+  hideEmojiReaction,
+  hideStorageUsed,
+  hideSupportButton,
+  redirectSettingsToAll,
+};
