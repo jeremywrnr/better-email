@@ -1,3 +1,3 @@
 export const log = (...args) => {
-  console.debug("[BetterGmail]", ...args);
+  console.debug("[BetterEmail]", ...args);
 };

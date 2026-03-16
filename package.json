@@ -1,5 +1,5 @@
 {
-  "name": "gmail-extension",
+  "name": "better-email",
   "version": "1.0.0",
   "scripts": {
     "start": "web-ext run",
