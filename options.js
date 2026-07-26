@@ -12,6 +12,7 @@ const DEFAULTS = {
   hideFooterLinks: true,
   hideSuggestedReplies: true,
   hideSupportButton: true,
+  hideUpgradeButton: true,
   autoExpandThreads: true,
 };
 

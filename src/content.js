@@ -24,6 +24,7 @@ const {
   hideFooterLinks,
   hideStorageUsed,
   hideSupportButton,
+  hideUpgradeButton,
   redirectSettingsToAll,
 } = require("./hideElements.js");
 const { expandCollapsedMessages } = require("./autoExpand.js");
@@ -122,6 +123,10 @@ async function init() {
 
   if (settings.hideSupportButton) {
     hideSupportButton();
+  }
+
+  if (settings.hideUpgradeButton) {
+    hideUpgradeButton();
   }
 
   redirectSettingsToAll();

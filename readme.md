@@ -26,4 +26,4 @@ npm run fix        # fix formatting
 npm run clean      # remove build artifacts
 ```
 
-MIT License — https://jeremywrnr.com/mit-license/
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
