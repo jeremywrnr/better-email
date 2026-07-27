@@ -1,6 +1,6 @@
 {
   "name": "better-email",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "scripts": {
     "start": "web-ext run",
     "start:chrome": "web-ext run --target chromium",
