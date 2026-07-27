@@ -37,6 +37,12 @@ function hideSupportButton() {
   injectStyle('[data-tooltip="Support"] { display: none !important; }');
 }
 
+function hideUpgradeButton() {
+  injectStyle(
+    '[data-pep-id="global-pep-gmail"] { display: none !important; }',
+  );
+}
+
 function redirectSettingsToAll() {
   document.addEventListener(
     "click",
@@ -61,5 +67,6 @@ module.exports = {
   hideFooterLinks,
   hideStorageUsed,
   hideSupportButton,
+  hideUpgradeButton,
   redirectSettingsToAll,
 };
