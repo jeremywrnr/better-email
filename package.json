@@ -1,6 +1,6 @@
 {
   "name": "better-email",
-  "version": "1.0.0",
+  "version": "1.2.1",
   "scripts": {
     "start": "web-ext run",
     "start:chrome": "web-ext run --target chromium",
@@ -15,7 +15,7 @@
     "@babel/preset-env": "^7.26.0",
     "babel-loader": "^9.2.1",
     "terser-webpack-plugin": "^5.3.11",
-    "web-ext": "^8.3.0",
+    "web-ext": "^10.5.0",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1"
   }

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Better Email",
-  "version": "1.1",
+  "version": "1.2.1",
   "description": "Extension for Gmail: in a conversation, click a subject profile image to view all conversations with that subject",
   "permissions": ["storage"],
   "options_ui": {
