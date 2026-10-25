@@ -8,7 +8,7 @@ A Firefox extension that declutters Gmail — removes AI features, hides distrac
 
 **Clean up** — Hide AI Overview summaries, suggested replies, Gemini buttons, emoji reactions, support button, side panel, "Print all" button, footer clutter, and storage usage.
 
-**Navigate faster** — Click sender names to filter by address, click profile images to filter by sender or domain, auto-expand long threads, copy email addresses with one click, copy a permalink to any conversation.
+**Navigate faster** — Click sender names to filter by address, click profile images to filter by sender or domain, auto-expand long threads, copy email addresses with one click (or from the search contact card), copy a permalink to any conversation.
 
 ## Privacy
 
