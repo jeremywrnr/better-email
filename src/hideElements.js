@@ -16,7 +16,11 @@ function hideAIOverview() {
 }
 
 function hideSuggestedReplies() {
-  injectStyle("div.brb { display: none !important; }");
+  injectStyle(`
+    div.brb,
+    .mVCoBd:has([aria-label^="Suggested reply"]),
+    [aria-label^="Suggested reply"] { display: none !important; }
+  `);
 }
 
 function hideStorageUsed() {

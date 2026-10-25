@@ -122,7 +122,7 @@ something, check this table first.
 | --- | --- | --- | --- |
 | Gemini (`hideGemini`) | `[data-rp-placement-id="gemkick-pep-icon-callout-id"]`, `div:has(> span > button[aria-label*="Gemini"])` | 2026-10-24 | top-bar sparkle is a native `<button aria-label="Try Gemini">` (no role attr); hide its wrapper div to avoid a 40px gap |
 | AI Overview (`hideAIOverview`) | `div.eJPjde` | unverified | obfuscated class |
-| Suggested replies (`hideSuggestedReplies`) | `div.brb` | BROKEN (2026-10-24) | "Suggested reply" box still shows in an open thread |
+| Suggested replies (`hideSuggestedReplies`) | `.mVCoBd:has([aria-label^="Suggested reply"])`, `[aria-label^="Suggested reply"]` (+ legacy `div.brb`) | 2026-10-24 | card is `[role=button][aria-label^="Suggested reply, …"]`; `.mVCoBd` wrapper also holds the header and its "Feedback" button. The bare aria rule is a fallback if the class changes |
 | Storage used (`hideStorageUsed`) | `a[href*="storage_meter"]` | unverified | |
 | Footer links (`hideFooterLinks`) | `div.aeU`; `[role="contentinfo"] > .ae3` (+ `.l6`) | 2026-10-24 | footer is 3 floated 1/3 columns (`.aeV` storage, `.aeU` links, `.ae3` activity); hiding `.aeU` strands `.ae3` mid-page, so it is floated right on one line. Obfuscated classes scoped under `role=contentinfo` |
 | Emoji reaction (`hideEmojiReaction`) | `div.wrsVRe[data-position="dynamic"]`, `[aria-label="Add reaction"]` | unverified | |
