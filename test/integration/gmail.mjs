@@ -56,16 +56,26 @@ export async function openGmail(hash = "#inbox") {
   return page;
 }
 
-// Opens the newest already-read thread in this tab.
+// Opens the newest already-read thread without drafts in this tab, so nothing
+// gets marked read and no draft editor pops open.
+const READ_THREADS = "is:read -in:drafts -from:me";
+
 export async function openReadThread(page) {
-  await page.evaluate(`location.hash = "#search/is%3Aread"`);
-  await waitFor(
-    page,
-    `location.hash.startsWith("#search") && document.querySelector("[role=main] tr[role=row]")`,
-    "read-mail search results",
+  await page.evaluate(
+    `location.hash = "#search/" + encodeURIComponent(${JSON.stringify(READ_THREADS)})`,
   );
-  await settle(page, 500);
-  await page.click("[role=main] tr[role=row]");
+  // The previous view's rows linger until results render; wait for the title.
+  await waitFor(page, `document.title.startsWith("Search results")`, "search view");
+  await settle(page);
+  const picked = await page.evaluate(`(() => {
+    const row = [...document.querySelectorAll("[role=main] tr[role=row]")].find(
+      (r) => r.getClientRects().length && !/\\bDraft\\b/.test(r.innerText));
+    if (!row) return false;
+    row.setAttribute("data-bg-test-target", "");
+    return true;
+  })()`);
+  if (!picked) throw new Error(`no thread matching "${READ_THREADS}"`);
+  await page.click("[data-bg-test-target]");
   await waitFor(page, `document.querySelector("h2[data-legacy-thread-id]")`, "open thread");
   await settle(page);
 }
