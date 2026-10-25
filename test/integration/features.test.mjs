@@ -20,6 +20,20 @@ describe("features", () => {
   });
   after(() => page?.close());
 
+  test("loading status follows the load and finishes with the splash", async () => {
+    const status = await waitFor(
+      page,
+      `(() => { const s = document.querySelector("#loading #bg-load-status");
+        return s?.dataset.phase === "done" && {
+          splash: getComputedStyle(document.getElementById("loading")).display,
+          progress: document.getElementById("nlpt").style.getPropertyValue("--bg-progress"),
+        }; })()`,
+      "loading status to reach done",
+      5000,
+    );
+    assert.deepEqual(status, { splash: "none", progress: "100" });
+  });
+
   // Runs first, while the tab is still on the inbox.
   test("footer activity sits on one line at the right edge", async () => {
     await waitFor(

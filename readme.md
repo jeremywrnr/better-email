@@ -10,6 +10,8 @@ A Firefox extension that declutters Gmail — removes AI features, hides distrac
 
 **Navigate faster** — Click sender names to filter by address, click profile images to filter by sender or domain, auto-expand long threads, copy email addresses with one click (or from the search contact card), copy a permalink to any conversation.
 
+**Load without the blank page:** while Gmail starts, show its logo and a progress bar that follows the real load (fetching your mailbox, then starting Gmail) instead of a blank page with a "having trouble loading?" link.
+
 ## Privacy
 
 Runs entirely in your browser. No data collected, no network requests, nothing leaves your device.
