@@ -13,6 +13,7 @@ const DEFAULTS = {
   hideSuggestedReplies: true,
   hideSupportButton: true,
   hideUpgradeButton: true,
+  hideSidePanel: true,
   autoExpandThreads: true,
 };
 

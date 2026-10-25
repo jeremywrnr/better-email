@@ -5,9 +5,10 @@ function injectStyle(css) {
 }
 
 function hideGeminiButton() {
-  injectStyle(
-    '[data-rp-placement-id="gemkick-pep-icon-callout-id"] { display: none !important; }',
-  );
+  injectStyle(`
+    [data-rp-placement-id="gemkick-pep-icon-callout-id"],
+    div:has(> span > button[aria-label*="Gemini"]) { display: none !important; }
+  `);
 }
 
 function hideAIOverview() {
@@ -23,7 +24,12 @@ function hideStorageUsed() {
 }
 
 function hideFooterLinks() {
-  injectStyle("div.aeU { display: none !important; }");
+  injectStyle(`
+    div.aeU { display: none !important; }
+    [role="contentinfo"] > .ae3 { float: right !important; width: auto !important; }
+    [role="contentinfo"] > .ae3 .l6 { display: flex !important; gap: 8px; align-items: baseline; }
+    [role="contentinfo"] > .ae3 .l6 > * { display: inline !important; }
+  `);
 }
 
 function hideEmojiReaction() {
@@ -40,6 +46,12 @@ function hideSupportButton() {
 function hideUpgradeButton() {
   injectStyle(
     '[data-pep-id="global-pep-gmail"] { display: none !important; }',
+  );
+}
+
+function hideSidePanel() {
+  injectStyle(
+    'div:has(> [role="complementary"][aria-label="Side panel"]) { display: none !important; }',
   );
 }
 
@@ -68,5 +80,6 @@ module.exports = {
   hideStorageUsed,
   hideSupportButton,
   hideUpgradeButton,
+  hideSidePanel,
   redirectSettingsToAll,
 };
