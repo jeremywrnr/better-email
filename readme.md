@@ -27,20 +27,10 @@ npm run clean      # remove build artifacts
 npm run test:integration  # end-to-end checks against live Gmail (see below)
 ```
 
-Integration tests drive a real, signed-in Gmail in a dedicated Chrome for
-Testing instance over the DevTools protocol (port 9222), with this extension
-loaded unpacked. Build first, then launch that browser with the extension and
-sign in to Gmail once:
-
-```
-npx webpack --no-watch
-chrome-dev --restart --ext . https://mail.google.com   # or any Chrome started with
-                                                       # --remote-debugging-port=9222
-                                                       # --load-extension=$PWD
-npm run test:integration
-```
-
-The tests open their own tabs, only open threads that are already read, and
-write to the clipboard.
+`test:integration` needs a signed-in Gmail in a Chrome on DevTools port 9222
+with this extension loaded unpacked (e.g. `npx webpack --no-watch && chrome-dev
+--restart --ext . https://mail.google.com`, or any Chrome started with
+`--remote-debugging-port=9222 --load-extension=$PWD`). The tests open their own
+tabs, only open threads that are already read, and write to the clipboard.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)

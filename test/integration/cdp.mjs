@@ -1,5 +1,5 @@
 // DevTools-protocol helpers for the chrome-dev browser (see ~/.local/bin/chrome-dev).
-// Used by the integration tests and by the gmail-ui skill's scripts.
+// Used by the integration tests and by the gmail-ui skill's scripts (as "#cdp").
 export const CDP = `http://127.0.0.1:${process.env.CHROME_DEV_PORT || 9222}`;
 
 // Attach to the first page tab whose URL contains `match`.
@@ -10,10 +10,10 @@ export async function connect(match) {
   return attach(t);
 }
 
-// Open `url` in a new tab; close() closes the tab.
+// Open `url` in a new tab and resolve once it has loaded; close() closes the tab.
 export async function openTab(url) {
   const t = await (
-    await fetch(`${CDP}/json/new?${url.replace(/#/g, "%23")}`, { method: "PUT" })
+    await fetch(`${CDP}/json/new?about:blank`, { method: "PUT" })
   ).json();
   const page = await attach(t);
   // Clipboard APIs need a focused document; a tab driven from here usually isn't.
@@ -22,12 +22,22 @@ export async function openTab(url) {
     origin: new URL(url).origin,
     permissions: ["clipboardReadWrite", "clipboardSanitizedWrite"],
   });
-  const close = page.close;
-  page.close = async () => {
-    close();
-    await fetch(`${CDP}/json/close/${t.id}`);
-  };
-  return page;
+  await page.send("Page.enable");
+  const loaded = page.once("Page.loadEventFired");
+  await page.send("Page.navigate", { url });
+  await loaded;
+  return { ...page, close: () => fetch(`${CDP}/json/close/${t.id}`) };
+}
+
+// JS expression for the element `target` names: a CSS selector, or
+// "text:Exact label" for the deepest element with that text.
+function finder(target) {
+  if (!target.startsWith("text:"))
+    return `document.querySelector(${JSON.stringify(target)})`;
+  // Walks text nodes rather than reading innerText on every element (which forces layout).
+  return `(() => { const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let n, hit;
+    while ((n = w.nextNode())) if (n.nodeValue.trim() === ${JSON.stringify(target.slice(5))}) hit = n.parentElement;
+    return hit; })()`;
 }
 
 async function attach(t) {
@@ -53,6 +63,17 @@ async function attach(t) {
       ws.addEventListener("message", onMessage);
       ws.send(JSON.stringify({ id: i, method, params }));
     });
+  // Resolves with the params of the next `method` event.
+  const once = (method) =>
+    new Promise((resolve) => {
+      const onMessage = (m) => {
+        const d = JSON.parse(m.data);
+        if (d.method !== method) return;
+        ws.removeEventListener("message", onMessage);
+        resolve(d.params);
+      };
+      ws.addEventListener("message", onMessage);
+    });
   const evaluate = async (expression) => {
     const { result, exceptionDetails } = await send("Runtime.evaluate", {
       expression,
@@ -65,24 +86,32 @@ async function attach(t) {
       );
     return result.value;
   };
-  // Real mouse press/release at the element's center; Gmail ignores many synthetic .click()s.
-  const click = async (selector) => {
-    const pos = await evaluate(`(() => {
-      const e = document.querySelector(${JSON.stringify(selector)});
+  // Scrolls `target` into view; returns its center and box.
+  const center = async (target) => {
+    const box = await evaluate(`(() => {
+      const e = ${finder(target)};
       if (!e) return null;
       e.scrollIntoView({ block: "center" });
       const r = e.getBoundingClientRect();
-      return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+      return { x: r.x + r.width / 2, y: r.y + r.height / 2, top: r.top, tag: e.tagName };
     })()`);
-    if (!pos) throw new Error(`no element for ${selector}`);
-    for (const type of ["mouseMoved", "mousePressed", "mouseReleased"])
-      await send("Input.dispatchMouseEvent", {
-        type,
-        x: pos.x,
-        y: pos.y,
-        button: "left",
-        clickCount: 1,
-      });
+    if (!box) throw new Error(`no element for ${target}`);
+    return box;
   };
-  return { send, evaluate, click, close: () => ws.close() };
+  const mouse = (type, { x, y }) =>
+    send("Input.dispatchMouseEvent", { type, x, y, button: "left", clickCount: 1 });
+  // Real mouse events; Gmail ignores many synthetic .click()s and :hover needs a pointer.
+  const hover = async (target) => {
+    const box = await center(target);
+    await mouse("mouseMoved", { x: box.x, y: box.y + 80 }); // enter from outside
+    await mouse("mouseMoved", box);
+    return box;
+  };
+  const click = async (target) => {
+    const box = await hover(target);
+    await mouse("mousePressed", box);
+    await mouse("mouseReleased", box);
+    return box;
+  };
+  return { send, once, evaluate, center, hover, click, close: () => ws.close() };
 }

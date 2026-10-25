@@ -9,6 +9,7 @@ import {
   assertBrowser,
   openGmail,
   openReadThread,
+  sleep,
   visibility,
 } from "./gmail.mjs";
 
@@ -30,9 +31,13 @@ describe("hide settings", () => {
 
   before(async () => {
     await assertBrowser();
-    pages.inbox = await openGmail("#inbox");
-    pages.thread = await openGmail("#inbox");
+    [pages.inbox, pages.thread] = await Promise.all([
+      openGmail("#inbox"),
+      openGmail("#inbox"),
+    ]);
     await openReadThread(pages.thread);
+    // Some thread controls render late; "absent" would otherwise become a skip.
+    await sleep(1500);
   });
 
   after(() => Promise.all(Object.values(pages).map((p) => p.close())));

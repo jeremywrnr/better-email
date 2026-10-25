@@ -114,10 +114,10 @@ npm run check            # prettier; run `npm run fix` if it fails
   to catch anything that changed unexpectedly. This restarts the browser, so ask
   first if the user is working in it.
 - **Links/URLs the extension generates:** test exactly what lands on the
-  clipboard (`navigator.clipboard.readText()` after `click.mjs`) by opening it
-  in a **fresh tab** (`curl -X PUT "http://127.0.0.1:9222/json/new?<url with # as %23>"`),
-  then close that tab. Navigating an already-loaded Gmail tab can succeed where
-  a cold load fails.
+  clipboard by opening it with `openTab(url)` from `#cdp` (a cold load in a
+  fresh tab, with clipboard access), as the permalink test in
+  `test/integration/features.test.mjs` does. Navigating an already-loaded Gmail
+  tab can succeed where a cold load fails.
 - Scripts target the first tab whose URL matches, so when the user has several
   Gmail tabs, match on a more specific URL fragment.
 - Gmail ignores JS `.click()` on many controls. Use `scripts/click.mjs`
