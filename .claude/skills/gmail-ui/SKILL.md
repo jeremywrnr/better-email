@@ -69,14 +69,17 @@ neighbors (Settings, apps grid, avatar, toolbar) look right. Iterate by editing
 
 ## 4. Wire it in
 
-- **Fixing an existing toggle:** edit only its function in `src/hideElements.js`.
-- **New toggle:** touch every link in the chain:
-  1. `src/defaults.js`: add the key to `DEFAULTS`
-  2. `options.js`: add the same key to its duplicate `DEFAULTS`
+- **Fixing an existing hide toggle:** edit its entry in `HIDE_SELECTORS` (or
+  `EXTRA_CSS` for rules that aren't plain `display: none`) in `src/hideElements.js`.
+- **New hide toggle:**
+  1. `src/hideElements.js`: add `key: [selectors]` to `HIDE_SELECTORS`.
+     `applyHideSettings()` injects every enabled entry as one stylesheet.
+  2. `src/defaults.js`: add the key to `DEFAULTS` (also read by the options page)
   3. `options.html`: add a checkbox whose `id` matches the key, with a label like `Top - hide …`
-  4. `src/hideElements.js`: add a `hideX()` that calls `injectStyle(...)`, and export it
-  5. `src/content.js`: import it and call it under `if (settings.key)`
-  6. `readme.md`: add it to the "Clean up" line
+  4. `readme.md`: add it to the "Clean up" line
+- **New behavior (buttons, copying):** add a module and register it in
+  `src/content.js` under `if (settings.key)`. Use `copyWithToast()` from
+  `src/toast.js` for anything that copies to the clipboard.
 
 ## 5. Build and check
 
@@ -122,12 +125,13 @@ something, check this table first.
 | --- | --- | --- | --- |
 | Gemini (`hideGemini`) | `[data-rp-placement-id="gemkick-pep-icon-callout-id"]`, `div:has(> span > button[aria-label*="Gemini"])` | 2026-10-24 | top-bar sparkle is a native `<button aria-label="Try Gemini">` (no role attr); hide its wrapper div to avoid a 40px gap |
 | AI Overview (`hideAIOverview`) | `div.eJPjde` | unverified | obfuscated class |
-| Suggested replies (`hideSuggestedReplies`) | `.mVCoBd:has([aria-label^="Suggested reply"])`, `[aria-label^="Suggested reply"]` (+ legacy `div.brb`) | 2026-10-24 | card is `[role=button][aria-label^="Suggested reply, …"]`; `.mVCoBd` wrapper also holds the header and its "Feedback" button. The bare aria rule is a fallback if the class changes |
+| Suggested replies (`hideSuggestedReplies`) | `.mVCoBd:has([aria-label^="Suggested reply"])` | 2026-10-24 | card is `[role=button][aria-label^="Suggested reply, …"]`; the `.mVCoBd` wrapper also holds the header and its "Feedback" button. Old `div.brb` is dead (removed) |
 | Storage used (`hideStorageUsed`) | `a[href*="storage_meter"]` | unverified | |
-| Footer links (`hideFooterLinks`) | `div.aeU`; `[role="contentinfo"] > .ae3` (+ `.l6`) | 2026-10-24 | footer is 3 floated 1/3 columns (`.aeV` storage, `.aeU` links, `.ae3` activity); hiding `.aeU` strands `.ae3` mid-page, so it is floated right on one line. Obfuscated classes scoped under `role=contentinfo` |
+| Footer links (`hideFooterLinks`) | `div.aeU`; `[role="contentinfo"] > .ae3` (+ `.l6`) | 2026-10-24 | footer is 3 floated 1/3 columns (`.aeV` storage, `.aeU` links, `.ae3` activity); hiding `.aeU` strands `.ae3` mid-page, so it is floated right on one line. Tried `visibility: hidden` to keep the slot instead: activity still lands mid-page and wraps. Obfuscated classes scoped under `role=contentinfo` |
 | Emoji reaction (`hideEmojiReaction`) | `div.wrsVRe[data-position="dynamic"]`, `[aria-label="Add reaction"]` | unverified | |
 | Support (`hideSupportButton`) | `[data-tooltip="Support"]` | unverified | |
 | Upgrade (`hideUpgradeButton`) | `[data-pep-id="global-pep-gmail"]` | unverified | |
 | Side panel (`hideSidePanel`) | `div:has(> [role="complementary"][aria-label="Side panel"])` | 2026-10-24 | hide the 56px wrapper, not just the panel, so content reclaims the width |
 | Print all (`hidePrintAll`) | `span:has(> button[aria-label="Print all"])` | 2026-10-24 | native `<button>` in a tooltip-wrapper span, in the open-thread header |
-| Copy permalink (`copyPermalink`) | inserted before `span:has(> button[aria-label="In new window"])`; thread id from `h2[data-legacy-thread-id]`; account from `[aria-label^="Google Account"]` | 2026-10-24 | link is `/mail/?authuser=<email>#all/<legacy thread id>`. `/mail/u/<email>/…` 404s on a fresh load even though it works when navigated from an open Gmail tab |
+| Copy permalink (`copyPermalink`) | inserted before `button[aria-label="In new window"]`'s wrapper span; thread id from `h2[data-legacy-thread-id]`; account from `[aria-label^="Google Account"]` | 2026-10-24 | link is `/mail/?authuser=<email>#all/<legacy thread id>`. `/mail/u/<email>/…` 404s on a fresh load even though it works when navigated from an open Gmail tab |
+| Copy contact email (`copyContactEmail`) | after `span.DQ` (envelope `img` + address `div.Cz`) on the search contact card | 2026-10-24 | obfuscated classes only; `span.DQ` itself opens a new message, so the copy button sits outside it, nudged up 6px to center on the address line |
