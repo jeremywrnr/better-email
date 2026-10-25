@@ -101,6 +101,13 @@ npm run check            # prettier; run `npm run fix` if it fails
   on | changed pixels in red) and prints the pixel counts. Read the diff images
   to catch anything that changed unexpectedly. This restarts the browser, so ask
   first if the user is working in it.
+- **Links/URLs the extension generates:** test exactly what lands on the
+  clipboard (`navigator.clipboard.readText()` after `click.mjs`) by opening it
+  in a **fresh tab** (`curl -X PUT "http://127.0.0.1:9222/json/new?<url with # as %23>"`),
+  then close that tab. Navigating an already-loaded Gmail tab can succeed where
+  a cold load fails.
+- Scripts target the first tab whose URL matches, so when the user has several
+  Gmail tabs, match on a more specific URL fragment.
 - Gmail ignores JS `.click()` on many controls. Use `scripts/click.mjs`
   (`text:Exact label` or a CSS selector) to send real mouse events.
 
@@ -123,4 +130,4 @@ something, check this table first.
 | Upgrade (`hideUpgradeButton`) | `[data-pep-id="global-pep-gmail"]` | unverified | |
 | Side panel (`hideSidePanel`) | `div:has(> [role="complementary"][aria-label="Side panel"])` | 2026-10-24 | hide the 56px wrapper, not just the panel, so content reclaims the width |
 | Print all (`hidePrintAll`) | `span:has(> button[aria-label="Print all"])` | 2026-10-24 | native `<button>` in a tooltip-wrapper span, in the open-thread header |
-| Copy permalink (`copyPermalink`) | inserted before `span:has(> button[aria-label="In new window"])`; thread id from `h2[data-legacy-thread-id]`; account from `[aria-label^="Google Account"]` | 2026-10-24 | `/mail/u/<email>/#all/<legacy thread id>` opens the thread (Gmail rewrites it to `/u/0/#inbox/…`) |
+| Copy permalink (`copyPermalink`) | inserted before `span:has(> button[aria-label="In new window"])`; thread id from `h2[data-legacy-thread-id]`; account from `[aria-label^="Google Account"]` | 2026-10-24 | link is `/mail/?authuser=<email>#all/<legacy thread id>`. `/mail/u/<email>/…` 404s on a fresh load even though it works when navigated from an open Gmail tab |

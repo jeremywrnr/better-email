@@ -6,7 +6,9 @@ const LINK_ICON =
 const CHECK_ICON =
   '<svg viewBox="0 -960 960 960" height="20" width="20"><path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/></svg>';
 
-function getAccountPath() {
+// /mail/u/<email>/ 404s on a fresh load; ?authuser=<email> works and survives
+// account-order changes.
+function getAccountParam() {
   const label =
     document
       .querySelector('[aria-label^="Google Account"]')
@@ -21,7 +23,7 @@ function getPermalink() {
     .querySelector("h2[data-legacy-thread-id]")
     ?.getAttribute("data-legacy-thread-id");
   if (!threadId) return null;
-  return `https://mail.google.com/mail/u/${getAccountPath()}/#all/${threadId}`;
+  return `https://mail.google.com/mail/?authuser=${getAccountParam()}#all/${threadId}`;
 }
 
 let toastTimer;
