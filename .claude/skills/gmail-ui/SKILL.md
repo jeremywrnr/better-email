@@ -122,3 +122,4 @@ something, check this table first.
 | Support (`hideSupportButton`) | `[data-tooltip="Support"]` | unverified | |
 | Upgrade (`hideUpgradeButton`) | `[data-pep-id="global-pep-gmail"]` | unverified | |
 | Side panel (`hideSidePanel`) | `div:has(> [role="complementary"][aria-label="Side panel"])` | 2026-10-24 | hide the 56px wrapper, not just the panel, so content reclaims the width |
+| Print all (`hidePrintAll`) | `span:has(> button[aria-label="Print all"])` | 2026-10-24 | native `<button>` in a tooltip-wrapper span, in the open-thread header |

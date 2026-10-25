@@ -14,6 +14,7 @@ const DEFAULTS = {
   hideSupportButton: true,
   hideUpgradeButton: true,
   hideSidePanel: true,
+  hidePrintAll: true,
   autoExpandThreads: true,
 };
 

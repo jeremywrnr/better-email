@@ -55,6 +55,12 @@ function hideSidePanel() {
   );
 }
 
+function hidePrintAll() {
+  injectStyle(
+    'span:has(> button[aria-label="Print all"]) { display: none !important; }',
+  );
+}
+
 function redirectSettingsToAll() {
   document.addEventListener(
     "click",
@@ -81,5 +87,6 @@ module.exports = {
   hideSupportButton,
   hideUpgradeButton,
   hideSidePanel,
+  hidePrintAll,
   redirectSettingsToAll,
 };

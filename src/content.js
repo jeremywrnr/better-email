@@ -26,6 +26,7 @@ const {
   hideSupportButton,
   hideUpgradeButton,
   hideSidePanel,
+  hidePrintAll,
   redirectSettingsToAll,
 } = require("./hideElements.js");
 const { expandCollapsedMessages } = require("./autoExpand.js");
@@ -132,6 +133,10 @@ async function init() {
 
   if (settings.hideSidePanel) {
     hideSidePanel();
+  }
+
+  if (settings.hidePrintAll) {
+    hidePrintAll();
   }
 
   redirectSettingsToAll();
