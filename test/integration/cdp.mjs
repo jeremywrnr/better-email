@@ -18,10 +18,12 @@ export async function openTab(url) {
   const page = await attach(t);
   // Clipboard APIs need a focused document; a tab driven from here usually isn't.
   await page.send("Emulation.setFocusEmulationEnabled", { enabled: true });
-  await page.send("Browser.grantPermissions", {
-    origin: new URL(url).origin,
-    permissions: ["clipboardReadWrite", "clipboardSanitizedWrite"],
-  });
+  // Opaque origins (about:blank, data:) can't hold permissions.
+  if (/^https?:/.test(url))
+    await page.send("Browser.grantPermissions", {
+      origin: new URL(url).origin,
+      permissions: ["clipboardReadWrite", "clipboardSanitizedWrite"],
+    });
   await page.send("Page.enable");
   const loaded = page.once("Page.loadEventFired");
   await page.send("Page.navigate", { url });
