@@ -4,6 +4,7 @@ const DEFAULTS = {
   profileHover: true,
   clickToCopy: true,
   copyPermalink: true,
+  copyContactEmail: true,
   alwaysShowEmail: true,
   hideGemini: true,
   hideEmojiReaction: true,
@@ -19,4 +20,5 @@ const DEFAULTS = {
   autoExpandThreads: true,
 };
 
-module.exports = { DEFAULTS };
+// Also loaded as a plain <script> by options.html.
+if (typeof module !== "undefined") module.exports = { DEFAULTS };

@@ -17,25 +17,14 @@ const {
   showSenderEmail,
 } = require("./showSenderEmail.js");
 const {
-  hideGeminiButton,
-  hideAIOverview,
-  hideSuggestedReplies,
-  hideEmojiReaction,
-  hideFooterLinks,
-  hideStorageUsed,
-  hideSupportButton,
-  hideUpgradeButton,
-  hideSidePanel,
-  hidePrintAll,
+  injectStyle,
+  applyHideSettings,
   redirectSettingsToAll,
 } = require("./hideElements.js");
 const { expandCollapsedMessages } = require("./autoExpand.js");
-const {
-  addCopyPermalinkButton,
-  addCopyPermalinkStyle,
-} = require("./copyPermalink.js");
+const { addCopyPermalinkButton } = require("./copyPermalink.js");
+const { addCopyContactEmailButtons } = require("./copyContactEmail.js");
 const { DEFAULTS } = require("./defaults.js");
-const { injectStyle } = require("./hideElements.js");
 
 log("Extension Loading...", window.location.href);
 
@@ -103,45 +92,7 @@ async function init() {
     setInterval(applyClickToCopy, BETTER_GMAIL_TIMEOUT);
   }
 
-  if (settings.hideGemini) {
-    hideGeminiButton();
-  }
-
-  if (settings.hideAIOverview) {
-    hideAIOverview();
-  }
-
-  if (settings.hideSuggestedReplies) {
-    hideSuggestedReplies();
-  }
-
-  if (settings.hideEmojiReaction) {
-    hideEmojiReaction();
-  }
-
-  if (settings.hideStorageUsed) {
-    hideStorageUsed();
-  }
-
-  if (settings.hideFooterLinks) {
-    hideFooterLinks();
-  }
-
-  if (settings.hideSupportButton) {
-    hideSupportButton();
-  }
-
-  if (settings.hideUpgradeButton) {
-    hideUpgradeButton();
-  }
-
-  if (settings.hideSidePanel) {
-    hideSidePanel();
-  }
-
-  if (settings.hidePrintAll) {
-    hidePrintAll();
-  }
+  applyHideSettings(settings);
 
   redirectSettingsToAll();
 
@@ -154,8 +105,11 @@ async function init() {
   }
 
   if (settings.copyPermalink) {
-    addCopyPermalinkStyle();
     setInterval(addCopyPermalinkButton, BETTER_GMAIL_TIMEOUT);
+  }
+
+  if (settings.copyContactEmail) {
+    setInterval(addCopyContactEmailButtons, BETTER_GMAIL_TIMEOUT);
   }
 
   if (settings.alwaysShowEmail) {
