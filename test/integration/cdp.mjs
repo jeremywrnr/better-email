@@ -99,7 +99,13 @@ async function attach(t) {
     return box;
   };
   const mouse = (type, { x, y }) =>
-    send("Input.dispatchMouseEvent", { type, x, y, button: "left", clickCount: 1 });
+    send("Input.dispatchMouseEvent", {
+      type,
+      x,
+      y,
+      button: "left",
+      clickCount: 1,
+    });
   // Real mouse events; Gmail ignores many synthetic .click()s and :hover needs a pointer.
   const hover = async (target) => {
     const box = await center(target);
@@ -113,5 +119,13 @@ async function attach(t) {
     await mouse("mouseReleased", box);
     return box;
   };
-  return { send, once, evaluate, center, hover, click, close: () => ws.close() };
+  return {
+    send,
+    once,
+    evaluate,
+    center,
+    hover,
+    click,
+    close: () => ws.close(),
+  };
 }

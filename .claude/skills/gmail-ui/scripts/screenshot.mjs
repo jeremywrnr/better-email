@@ -7,7 +7,13 @@ const [match, out, h = "0"] = process.argv.slice(2);
 const { send, evaluate, close } = await connect(match);
 const params = { format: "png" };
 if (Number(h) > 0) {
-  params.clip = { x: 0, y: 0, width: await evaluate("innerWidth"), height: Number(h), scale: 1 };
+  params.clip = {
+    x: 0,
+    y: 0,
+    width: await evaluate("innerWidth"),
+    height: Number(h),
+    scale: 1,
+  };
 }
 const { data } = await send("Page.captureScreenshot", params);
 writeFileSync(out, Buffer.from(data, "base64"));

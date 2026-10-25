@@ -39,7 +39,11 @@ export async function waitFor(page, expr, what = expr, ms = 20000) {
 // A fresh tab on a Gmail view, with the list loaded and the extension active.
 export async function openGmail(hash = "#inbox") {
   const page = await openTab(GMAIL + hash);
-  await waitFor(page, `document.querySelector("[role=main] tr[role=row]")`, "message list");
+  await waitFor(
+    page,
+    `document.querySelector("[role=main] tr[role=row]")`,
+    "message list",
+  );
   await waitFor(
     page,
     `document.querySelector("style[data-better-email]")`,
@@ -49,7 +53,9 @@ export async function openGmail(hash = "#inbox") {
 }
 
 export async function openSearch(page, query) {
-  await page.evaluate(`location.hash = "#search/" + encodeURIComponent(${JSON.stringify(query)})`);
+  await page.evaluate(
+    `location.hash = "#search/" + encodeURIComponent(${JSON.stringify(query)})`,
+  );
   // The previous view's rows linger until results render; wait for the title.
   await waitFor(
     page,
@@ -72,7 +78,11 @@ export async function openReadThread(page) {
   })()`);
   if (!picked) throw new Error(`no thread matching "${READ_THREADS}"`);
   await page.click("[data-bg-test-target]");
-  await waitFor(page, `document.querySelector("button.bg-permalink")`, "open thread");
+  await waitFor(
+    page,
+    `document.querySelector("button.bg-permalink")`,
+    "open thread",
+  );
 }
 
 // "visible" | "hidden" | "absent" for the first element matching `selector`.

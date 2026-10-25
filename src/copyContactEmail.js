@@ -7,24 +7,26 @@ const COPY_ICON =
 // Search-results contact card: span.DQ is the envelope + address that opens a
 // new message. Add a copy button after it.
 function addCopyContactEmailButtons() {
-  document.querySelectorAll("span.DQ:not([data-copy-button])").forEach((card) => {
-    card.setAttribute("data-copy-button", "true");
-    const email = card.querySelector("div.Cz")?.textContent.trim();
-    if (!email) return;
-    const button = createIconButton(
-      "bg-copy-email",
-      "Copy email address",
-      COPY_ICON,
-      () => copyWithToast(email, "Email"),
-      { small: true },
-    );
-    card.after(button);
-    // Lay out envelope, address and button as one row so a long (truncated)
-    // address can't push the button onto its own line.
-    card.parentElement.style.cssText += "display: flex; align-items: center;";
-    card.style.cssText += "display: flex; align-items: center; min-width: 0;";
-    card.querySelector("div.Cz").style.minWidth = "0";
-  });
+  document
+    .querySelectorAll("span.DQ:not([data-copy-button])")
+    .forEach((card) => {
+      card.setAttribute("data-copy-button", "true");
+      const email = card.querySelector("div.Cz")?.textContent.trim();
+      if (!email) return;
+      const button = createIconButton(
+        "bg-copy-email",
+        "Copy email address",
+        COPY_ICON,
+        () => copyWithToast(email, "Email"),
+        { small: true },
+      );
+      card.after(button);
+      // Lay out envelope, address and button as one row so a long (truncated)
+      // address can't push the button onto its own line.
+      card.parentElement.style.cssText += "display: flex; align-items: center;";
+      card.style.cssText += "display: flex; align-items: center; min-width: 0;";
+      card.querySelector("div.Cz").style.minWidth = "0";
+    });
 }
 
 module.exports = { addCopyContactEmailButtons };

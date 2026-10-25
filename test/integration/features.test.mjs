@@ -37,8 +37,14 @@ describe("features", () => {
       return { gapRight: Math.round(f.right - line.right), height: Math.round(line.height),
         lineHeight: Math.round(leaf.getBoundingClientRect().height) };
     })()`);
-    assert.ok(box.gapRight < 40, `activity is ${box.gapRight}px from the right edge`);
-    assert.ok(box.height <= box.lineHeight * 1.5, `activity wraps (${box.height}px tall)`);
+    assert.ok(
+      box.gapRight < 40,
+      `activity is ${box.gapRight}px from the right edge`,
+    );
+    assert.ok(
+      box.height <= box.lineHeight * 1.5,
+      `activity wraps (${box.height}px tall)`,
+    );
   });
 
   test("copy permalink copies a link that opens the same thread", async () => {
@@ -48,7 +54,10 @@ describe("features", () => {
     );
     await page.click("button.bg-permalink");
     const link = await copiedText(page, "#all/");
-    assert.match(link, /^https:\/\/mail\.google\.com\/mail\/\?authuser=[^#]+#all\/[0-9a-f]+$/);
+    assert.match(
+      link,
+      /^https:\/\/mail\.google\.com\/mail\/\?authuser=[^#]+#all\/[0-9a-f]+$/,
+    );
 
     // A cold load in a fresh tab is what a pasted link gets; /u/<email>/ 404ed here.
     const fresh = await openTab(link);
@@ -83,10 +92,19 @@ describe("features", () => {
     );
     assert.ok(email, "sender address on the open thread");
     await openSearch(page, `from:${email}`);
-    const hasCard = await waitFor(page, `document.querySelector("span.DQ")`, "contact card", 3000).catch(() => false);
+    const hasCard = await waitFor(
+      page,
+      `document.querySelector("span.DQ")`,
+      "contact card",
+      3000,
+    ).catch(() => false);
     if (!hasCard) return t.skip(`Gmail showed no contact card for ${email}`);
 
-    await waitFor(page, `document.querySelector("button.bg-copy-email")`, "copy email button");
+    await waitFor(
+      page,
+      `document.querySelector("button.bg-copy-email")`,
+      "copy email button",
+    );
     await page.click("button.bg-copy-email");
     assert.equal(await copiedText(page, email), email);
     assert.ok(
