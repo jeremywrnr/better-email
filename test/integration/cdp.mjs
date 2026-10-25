@@ -65,6 +65,12 @@ async function attach(t) {
       ws.addEventListener("message", onMessage);
       ws.send(JSON.stringify({ id: i, method, params }));
     });
+  // Calls `handler(params)` for every `method` event.
+  const on = (method, handler) =>
+    ws.addEventListener("message", (m) => {
+      const d = JSON.parse(m.data);
+      if (d.method === method) handler(d.params);
+    });
   // Resolves with the params of the next `method` event.
   const once = (method) =>
     new Promise((resolve) => {
@@ -123,6 +129,7 @@ async function attach(t) {
   };
   return {
     send,
+    on,
     once,
     evaluate,
     center,
