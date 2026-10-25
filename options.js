@@ -3,6 +3,7 @@ const DEFAULTS = {
   domainMode: true,
   profileHover: true,
   clickToCopy: true,
+  copyPermalink: true,
   alwaysShowEmail: true,
   hideGemini: true,
   hideEmojiReaction: true,

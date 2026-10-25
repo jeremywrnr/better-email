@@ -123,3 +123,4 @@ something, check this table first.
 | Upgrade (`hideUpgradeButton`) | `[data-pep-id="global-pep-gmail"]` | unverified | |
 | Side panel (`hideSidePanel`) | `div:has(> [role="complementary"][aria-label="Side panel"])` | 2026-10-24 | hide the 56px wrapper, not just the panel, so content reclaims the width |
 | Print all (`hidePrintAll`) | `span:has(> button[aria-label="Print all"])` | 2026-10-24 | native `<button>` in a tooltip-wrapper span, in the open-thread header |
+| Copy permalink (`copyPermalink`) | inserted before `span:has(> button[aria-label="In new window"])`; thread id from `h2[data-legacy-thread-id]`; account from `[aria-label^="Google Account"]` | 2026-10-24 | `/mail/u/<email>/#all/<legacy thread id>` opens the thread (Gmail rewrites it to `/u/0/#inbox/…`) |

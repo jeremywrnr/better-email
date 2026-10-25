@@ -30,6 +30,10 @@ const {
   redirectSettingsToAll,
 } = require("./hideElements.js");
 const { expandCollapsedMessages } = require("./autoExpand.js");
+const {
+  addCopyPermalinkButton,
+  addCopyPermalinkStyle,
+} = require("./copyPermalink.js");
 const { DEFAULTS } = require("./defaults.js");
 const { injectStyle } = require("./hideElements.js");
 
@@ -147,6 +151,11 @@ async function init() {
 
   if (settings.autoExpandThreads) {
     setInterval(expandCollapsedMessages, BETTER_GMAIL_TIMEOUT);
+  }
+
+  if (settings.copyPermalink) {
+    addCopyPermalinkStyle();
+    setInterval(addCopyPermalinkButton, BETTER_GMAIL_TIMEOUT);
   }
 
   if (settings.alwaysShowEmail) {
