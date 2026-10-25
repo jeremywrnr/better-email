@@ -72,6 +72,25 @@ describe("thread features", () => {
     }
   });
 
+  test("permalink button shows a Gmail-style tooltip on hover", async () => {
+    const pos = await page.evaluate(`(() => {
+      const r = document.querySelector("button.bg-permalink").getBoundingClientRect();
+      return { x: r.x + r.width / 2, y: r.y + r.height / 2, top: r.top };
+    })()`);
+    await page.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: pos.x, y: pos.y + 80 });
+    await page.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: pos.x, y: pos.y });
+    const tip = await waitFor(
+      page,
+      `(() => { const t = document.querySelector(".bg-tooltip[data-visible]");
+        return t && { text: t.textContent, bottom: t.getBoundingClientRect().bottom }; })()`,
+      "tooltip",
+      3000,
+    );
+    assert.equal(tip.text, "Copy permalink");
+    assert.ok(tip.bottom <= pos.top, "tooltip sits above the button");
+    await page.send("Input.dispatchMouseEvent", { type: "mouseMoved", x: pos.x, y: pos.y + 80 });
+  });
+
   test("contact card copy button copies the sender's address", async (t) => {
     const email = await page.evaluate(`document.querySelector("[role=main] span[email]")?.getAttribute("email")`);
     assert.ok(email, "sender address on the open thread");

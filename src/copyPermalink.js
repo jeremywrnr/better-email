@@ -1,4 +1,4 @@
-const { injectStyle } = require("./hideElements.js");
+const { createIconButton } = require("./iconButton.js");
 const { copyWithToast } = require("./toast.js");
 
 const LINK_ICON =
@@ -24,8 +24,6 @@ function getPermalink() {
   return `https://mail.google.com/mail/?authuser=${getAccountParam()}#all/${threadId}`;
 }
 
-let styled = false;
-
 function addCopyPermalinkButton() {
   const newWindow = document.querySelector(
     'button[aria-label="In new window"]',
@@ -34,32 +32,7 @@ function addCopyPermalinkButton() {
     return;
   }
 
-  if (!styled) {
-    styled = true;
-    injectStyle(`
-      button.bg-permalink {
-        width: 40px;
-        height: 40px;
-        border: none;
-        border-radius: 50%;
-        background: transparent;
-        color: inherit;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        vertical-align: middle;
-      }
-      button.bg-permalink:hover { background: rgba(32, 33, 36, 0.06); }
-      button.bg-permalink svg { fill: currentColor; }
-    `);
-  }
-
-  const button = document.createElement("button");
-  button.className = "bg-permalink";
-  button.setAttribute("aria-label", "Copy permalink");
-  button.title = "Copy permalink";
-  button.innerHTML = LINK_ICON;
+  const button = createIconButton("bg-permalink", "Copy permalink", LINK_ICON);
   button.addEventListener("click", (e) => {
     e.stopPropagation();
     e.preventDefault();
