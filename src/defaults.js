@@ -3,6 +3,8 @@ const DEFAULTS = {
   domainMode: true,
   profileHover: true,
   clickToCopy: true,
+  copyPermalink: true,
+  copyContactEmail: true,
   alwaysShowEmail: true,
   hideGemini: true,
   hideEmojiReaction: true,
@@ -13,7 +15,10 @@ const DEFAULTS = {
   hideSuggestedReplies: true,
   hideSupportButton: true,
   hideUpgradeButton: true,
+  hideSidePanel: true,
+  hidePrintAll: true,
   autoExpandThreads: true,
 };
 
-module.exports = { DEFAULTS };
+// Also loaded as a plain <script> by options.html.
+if (typeof module !== "undefined") module.exports = { DEFAULTS };

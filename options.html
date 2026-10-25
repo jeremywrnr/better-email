@@ -77,6 +77,14 @@
         address to copy</label
       >
       <label
+        ><input type="checkbox" id="copyPermalink" /> Conversation - "Copy
+        permalink" button</label
+      >
+      <label
+        ><input type="checkbox" id="copyContactEmail" /> Search - copy button
+        next to the contact card's email</label
+      >
+      <label
         ><input type="checkbox" id="alwaysShowEmail" /> Conversation - show
         sender email address</label
       >
@@ -97,8 +105,8 @@
     <fieldset>
       <legend>Clean Up</legend>
       <label
-        ><input type="checkbox" id="hideGemini" /> Top - hide "Try Gemini"
-        button</label
+        ><input type="checkbox" id="hideGemini" /> Top - hide Gemini
+        buttons</label
       >
       <label
         ><input type="checkbox" id="hideSupportButton" /> Top - hide support
@@ -118,7 +126,7 @@
       >
       <label
         ><input type="checkbox" id="hideFooterLinks" /> Footer - hide links
-        (terms, privacy, activity)</label
+        (terms, privacy), right-align activity</label
       >
       <label
         ><input type="checkbox" id="hideStorageUsed" /> Footer - hide storage
@@ -128,9 +136,18 @@
         ><input type="checkbox" id="hideUpgradeButton" /> Top - hide "Upgrade"
         button</label
       >
+      <label
+        ><input type="checkbox" id="hideSidePanel" /> Side - hide side panel
+        (Calendar, Keep, Tasks, add-ons)</label
+      >
+      <label
+        ><input type="checkbox" id="hidePrintAll" /> Conversation - hide "Print
+        all" button</label
+      >
     </fieldset>
 
     <div id="status"></div>
+    <script src="src/defaults.js"></script>
     <script src="options.js"></script>
   </body>
 </html>
