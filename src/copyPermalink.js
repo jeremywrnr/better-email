@@ -24,6 +24,24 @@ function getPermalink() {
   return `https://mail.google.com/mail/u/${getAccountPath()}/#all/${threadId}`;
 }
 
+let toastTimer;
+
+function showToast(title, detail) {
+  let toast = document.querySelector(".bg-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.className = "bg-toast";
+    toast.setAttribute("role", "status");
+    toast.innerHTML = "<strong></strong><span></span>";
+    document.body.appendChild(toast);
+  }
+  toast.querySelector("strong").textContent = title;
+  toast.querySelector("span").textContent = detail;
+  toast.setAttribute("data-visible", "true");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.removeAttribute("data-visible"), 4000);
+}
+
 function addCopyPermalinkButton() {
   const newWindow = document.querySelector(
     'span:has(> button[aria-label="In new window"])',
@@ -45,6 +63,7 @@ function addCopyPermalinkButton() {
     try {
       await navigator.clipboard.writeText(link);
       log("Copied", link);
+      showToast("Link copied", link);
       button.innerHTML = CHECK_ICON;
       button.title = "Copied!";
       setTimeout(() => {
@@ -53,6 +72,7 @@ function addCopyPermalinkButton() {
       }, 1500);
     } catch (err) {
       log("Copy failed", err);
+      showToast("Copy failed", link);
     }
   });
 
@@ -79,6 +99,35 @@ function addCopyPermalinkStyle() {
     }
     button.bg-permalink svg {
       fill: currentColor;
+    }
+    .bg-toast {
+      position: fixed;
+      left: 24px;
+      bottom: 24px;
+      z-index: 10000;
+      max-width: min(560px, calc(100vw - 48px));
+      padding: 14px 24px;
+      border-radius: 4px;
+      background: #323232;
+      color: #fff;
+      font: 14px/20px "Google Sans", Roboto, Arial, sans-serif;
+      box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px rgba(0, 0, 0, 0.14);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.15s, transform 0.15s;
+      pointer-events: none;
+    }
+    .bg-toast[data-visible] {
+      opacity: 1;
+      transform: none;
+    }
+    .bg-toast span {
+      font-size: 12px;
+      opacity: 0.75;
+      overflow-wrap: anywhere;
     }
   `);
 }
