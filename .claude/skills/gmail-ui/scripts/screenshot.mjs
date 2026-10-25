@@ -1,7 +1,7 @@
 // usage: node screenshot.mjs <url-substring> <out.png> [height]
 // Captures the full viewport, or only its top `height` CSS px (e.g. 120 for Gmail's top bar).
 import { writeFileSync } from "fs";
-import { connect } from "./cdp.mjs";
+import { connect } from "../../../../test/integration/cdp.mjs";
 
 const [match, out, h = "0"] = process.argv.slice(2);
 const { send, evaluate, close } = await connect(match);

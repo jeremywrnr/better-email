@@ -8,7 +8,8 @@
     "check": "prettier . --check",
     "fix": "prettier . --write",
     "clean": "rm -rf  dist/ web-ext-artifacts/",
-    "publish": "webpack --no-watch --mode production && web-ext build --overwrite-dest"
+    "publish": "webpack --no-watch --mode production && web-ext build --overwrite-dest",
+    "test:integration": "node --test --test-concurrency=1 --test-timeout=120000 \"test/integration/*.test.mjs\""
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

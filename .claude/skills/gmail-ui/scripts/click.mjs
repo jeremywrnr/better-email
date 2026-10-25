@@ -1,6 +1,6 @@
 // usage: node click.mjs <url-substring> <css-selector | text:Exact text>
 // Sends a real mouse press/release at the element's center (Gmail ignores many synthetic .click() calls).
-import { connect } from "./cdp.mjs";
+import { connect } from "../../../../test/integration/cdp.mjs";
 
 const [match, target] = process.argv.slice(2);
 const { send, evaluate, close } = await connect(match);

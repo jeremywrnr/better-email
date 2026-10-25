@@ -1,6 +1,6 @@
 // usage: node eval.mjs <url-substring> <js-expression>
 // Prints the JSON result. Promises are awaited.
-import { connect } from "./cdp.mjs";
+import { connect } from "../../../../test/integration/cdp.mjs";
 
 const [match, expr] = process.argv.slice(2);
 const { evaluate, close } = await connect(match);

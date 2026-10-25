@@ -77,6 +77,8 @@ neighbors (Settings, apps grid, avatar, toolbar) look right. Iterate by editing
   2. `src/defaults.js`: add the key to `DEFAULTS` (also read by the options page)
   3. `options.html`: add a checkbox whose `id` matches the key, with a label like `Top - hide …`
   4. `readme.md`: add it to the "Clean up" line
+  5. `test/integration/hide.test.mjs`: add a `PROBES` entry (the Gmail control
+     it hides, and whether it shows on the `inbox` or `thread` view)
 - **New behavior (buttons, copying):** add a module and register it in
   `src/content.js` under `if (settings.key)`. Use `copyWithToast()` from
   `src/toast.js` for anything that copies to the clipboard.
@@ -90,6 +92,13 @@ npm run check            # prettier; run `npm run fix` if it fails
 
 ## 6. Verify in the real extension
 
+- **Run the integration suite:** `npm run test:integration` (needs chrome-dev
+  running with the fresh build). It opens its own tabs against the signed-in
+  Gmail, only opens already-read threads, and overwrites the clipboard. Hide
+  probes fail when a control is visible (stale selector) and skip when Gmail
+  didn't render it. New features get an end-to-end test in
+  `test/integration/features.test.mjs`, which should open any link they
+  produce in a fresh tab (`openTab`).
 - Run `chrome-dev --restart https://mail.google.com` from the repo root. It
   relaunches Chrome with the rebuilt `dist/` bundle, and the profile keeps you
   signed in. Then reconnect, because the MCP's page handles go stale.
