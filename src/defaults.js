@@ -18,6 +18,7 @@ const DEFAULTS = {
   hideSidePanel: true,
   hidePrintAll: true,
   autoExpandThreads: true,
+  loadingStatus: true,
 };
 
 // Also loaded as a plain <script> by options.html.
