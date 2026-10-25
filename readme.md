@@ -24,6 +24,7 @@ npm run publish    # production zip for addons.mozilla.org
 npm run check      # check formatting
 npm run fix        # fix formatting
 npm run clean      # remove build artifacts
+just ci            # what CI runs on PRs: build, store lint, format check
 npm run test:integration  # end-to-end checks against live Gmail (see below)
 ```
 

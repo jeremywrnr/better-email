@@ -17,11 +17,29 @@ a selector — find it in live Gmail, prove it, then ship it.
   in to Gmail once.
 - Use `take_snapshot` to read the page and `evaluate_script` to locate the target:
   ```js
-  [...document.querySelectorAll('[aria-label*="X"], [data-tooltip*="X"]')]
-    .map(e => ({tag: e.tagName, role: e.getAttribute('role'),
-      aria: e.getAttribute('aria-label'), tip: e.getAttribute('data-tooltip'),
-      data: [...e.attributes].filter(a => a.name.startsWith('data-')).map(a => `${a.name}=${a.value}`),
-      parents: (() => { let p = e.parentElement, out = []; for (let i = 0; p && i < 4; i++, p = p.parentElement) out.push(p.tagName + (p.getAttribute('role') ? `[role=${p.getAttribute('role')}]` : '')); return out; })()}))
+  [...document.querySelectorAll('[aria-label*="X"], [data-tooltip*="X"]')].map(
+    (e) => ({
+      tag: e.tagName,
+      role: e.getAttribute("role"),
+      aria: e.getAttribute("aria-label"),
+      tip: e.getAttribute("data-tooltip"),
+      data: [...e.attributes]
+        .filter((a) => a.name.startsWith("data-"))
+        .map((a) => `${a.name}=${a.value}`),
+      parents: (() => {
+        let p = e.parentElement,
+          out = [];
+        for (let i = 0; p && i < 4; i++, p = p.parentElement)
+          out.push(
+            p.tagName +
+              (p.getAttribute("role")
+                ? `[role=${p.getAttribute("role")}]`
+                : ""),
+          );
+        return out;
+      })(),
+    }),
+  );
   ```
 - **MCP not loaded in this session?** If `chrome-dev` is running, use the
   zero-dependency DevTools protocol scripts in `scripts/` (Node 22+):
@@ -58,7 +76,8 @@ button was one).
 Inject the CSS before touching code:
 
 ```js
-const s = document.createElement('style'); s.id = 'bg-proto';
+const s = document.createElement("style");
+s.id = "bg-proto";
 s.textContent = `SELECTOR { display: none !important; }`;
 document.head.appendChild(s);
 ```
@@ -86,8 +105,9 @@ neighbors (Settings, apps grid, avatar, toolbar) look right. Iterate by editing
 ## 5. Build and check
 
 ```sh
-npx webpack --no-watch   # the config sets watch: true; don't let it hang
-npm run check            # prettier; run `npm run fix` if it fails
+npx webpack --no-watch   # quick dev build (the config sets watch: true; don't let it hang)
+just ci                  # what CI runs on the PR: production build + zip, web-ext lint
+                         # (warnings fail it), prettier check (`npm run fix` to format)
 ```
 
 ## 6. Verify in the real extension
@@ -130,17 +150,17 @@ something, check this table first.
 
 ## Known selectors
 
-| Feature (setting) | Selector | Last verified | Notes |
-| --- | --- | --- | --- |
-| Gemini (`hideGemini`) | `[data-rp-placement-id="gemkick-pep-icon-callout-id"]`, `div:has(> span > button[aria-label*="Gemini"])` | 2026-10-24 | top-bar sparkle is a native `<button aria-label="Try Gemini">` (no role attr); hide its wrapper div to avoid a 40px gap |
-| AI Overview (`hideAIOverview`) | `div.eJPjde` | unverified | obfuscated class |
-| Suggested replies (`hideSuggestedReplies`) | `.mVCoBd:has([aria-label^="Suggested reply"])` | 2026-10-24 | card is `[role=button][aria-label^="Suggested reply, …"]`; the `.mVCoBd` wrapper also holds the header and its "Feedback" button. Old `div.brb` is dead (removed) |
-| Storage used (`hideStorageUsed`) | `a[href*="storage_meter"]` | unverified | |
-| Footer links (`hideFooterLinks`) | `div.aeU`; `[role="contentinfo"] > .ae3` (+ `.l6`) | 2026-10-24 | footer is 3 floated 1/3 columns (`.aeV` storage, `.aeU` links, `.ae3` activity); hiding `.aeU` strands `.ae3` mid-page, so it is floated right on one line. Tried `visibility: hidden` to keep the slot instead: activity still lands mid-page and wraps. Obfuscated classes scoped under `role=contentinfo` |
-| Emoji reaction (`hideEmojiReaction`) | `div.wrsVRe[data-position="dynamic"]`, `[aria-label="Add reaction"]` | unverified | |
-| Support (`hideSupportButton`) | `[data-tooltip="Support"]` | unverified | |
-| Upgrade (`hideUpgradeButton`) | `[data-pep-id="global-pep-gmail"]` | unverified | |
-| Side panel (`hideSidePanel`) | `div:has(> [role="complementary"][aria-label="Side panel"])` | 2026-10-24 | hide the 56px wrapper, not just the panel, so content reclaims the width |
-| Print all (`hidePrintAll`) | `span:has(> button[aria-label="Print all"])` | 2026-10-24 | native `<button>` in a tooltip-wrapper span, in the open-thread header |
-| Copy permalink (`copyPermalink`) | inserted before `button[aria-label="In new window"]`'s wrapper span; thread id from `h2[data-legacy-thread-id]`; account from `[aria-label^="Google Account"]` | 2026-10-24 | link is `/mail/?authuser=<email>#all/<legacy thread id>`. `/mail/u/<email>/…` 404s on a fresh load even though it works when navigated from an open Gmail tab |
-| Copy contact email (`copyContactEmail`) | after `span.DQ` (envelope `img` + address `div.Cz`) on the search contact card | 2026-10-24 | obfuscated classes only; `span.DQ` itself opens a new message, so the copy button sits outside it, nudged up 6px to center on the address line |
+| Feature (setting)                          | Selector                                                                                                                                                       | Last verified | Notes                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Gemini (`hideGemini`)                      | `[data-rp-placement-id="gemkick-pep-icon-callout-id"]`, `div:has(> span > button[aria-label*="Gemini"])`                                                       | 2026-10-24    | top-bar sparkle is a native `<button aria-label="Try Gemini">` (no role attr); hide its wrapper div to avoid a 40px gap                                                                                                                                                                                      |
+| AI Overview (`hideAIOverview`)             | `div.eJPjde`                                                                                                                                                   | unverified    | obfuscated class                                                                                                                                                                                                                                                                                             |
+| Suggested replies (`hideSuggestedReplies`) | `.mVCoBd:has([aria-label^="Suggested reply"])`                                                                                                                 | 2026-10-24    | card is `[role=button][aria-label^="Suggested reply, …"]`; the `.mVCoBd` wrapper also holds the header and its "Feedback" button. Old `div.brb` is dead (removed)                                                                                                                                            |
+| Storage used (`hideStorageUsed`)           | `a[href*="storage_meter"]`                                                                                                                                     | unverified    |                                                                                                                                                                                                                                                                                                              |
+| Footer links (`hideFooterLinks`)           | `div.aeU`; `[role="contentinfo"] > .ae3` (+ `.l6`)                                                                                                             | 2026-10-24    | footer is 3 floated 1/3 columns (`.aeV` storage, `.aeU` links, `.ae3` activity); hiding `.aeU` strands `.ae3` mid-page, so it is floated right on one line. Tried `visibility: hidden` to keep the slot instead: activity still lands mid-page and wraps. Obfuscated classes scoped under `role=contentinfo` |
+| Emoji reaction (`hideEmojiReaction`)       | `div.wrsVRe[data-position="dynamic"]`, `[aria-label="Add reaction"]`                                                                                           | unverified    |                                                                                                                                                                                                                                                                                                              |
+| Support (`hideSupportButton`)              | `[data-tooltip="Support"]`                                                                                                                                     | unverified    |                                                                                                                                                                                                                                                                                                              |
+| Upgrade (`hideUpgradeButton`)              | `[data-pep-id="global-pep-gmail"]`                                                                                                                             | unverified    |                                                                                                                                                                                                                                                                                                              |
+| Side panel (`hideSidePanel`)               | `div:has(> [role="complementary"][aria-label="Side panel"])`                                                                                                   | 2026-10-24    | hide the 56px wrapper, not just the panel, so content reclaims the width                                                                                                                                                                                                                                     |
+| Print all (`hidePrintAll`)                 | `span:has(> button[aria-label="Print all"])`                                                                                                                   | 2026-10-24    | native `<button>` in a tooltip-wrapper span, in the open-thread header                                                                                                                                                                                                                                       |
+| Copy permalink (`copyPermalink`)           | inserted before `button[aria-label="In new window"]`'s wrapper span; thread id from `h2[data-legacy-thread-id]`; account from `[aria-label^="Google Account"]` | 2026-10-24    | link is `/mail/?authuser=<email>#all/<legacy thread id>`. `/mail/u/<email>/…` 404s on a fresh load even though it works when navigated from an open Gmail tab                                                                                                                                                |
+| Copy contact email (`copyContactEmail`)    | after `span.DQ` (envelope `img` + address `div.Cz`) on the search contact card                                                                                 | 2026-10-24    | obfuscated classes only; `span.DQ` itself opens a new message, so the copy button sits outside it, nudged up 6px to center on the address line                                                                                                                                                               |

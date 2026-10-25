@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# nothing here writes anything back, so the token gets read access and no more.
+# without this it inherits whatever the repository default is, which is write
+permissions:
+  contents: read
+
+# a second push while the first is still running makes the first answer stale,
+# so cancel it. keyed per ref: two open pull requests are separate questions.
+# main is exempt - its runs are the record of what merged
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    # the check takes well under a minute; anything near this is hung, and the
+    # default six hour ceiling would sit there burning minutes
+    timeout-minutes: 10
+
+    # npm run test:integration is not here on purpose: it drives a real,
+    # signed-in Gmail, which a runner doesn't have. run it locally (see readme)
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install just
+        uses: extractions/setup-just@v4
+
+      # the same recipe you run before pushing: production build and package,
+      # the add-on store linter (warnings fail it), and the formatting check
+      - name: Run checks
+        run: just ci
+
+      # the zip that would be uploaded to the store, kept even when a check
+      # fails, since that is when you want to look inside it
+      - name: Upload package
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: better-email-extension
+          path: web-ext-artifacts/*.zip
+          if-no-files-found: ignore

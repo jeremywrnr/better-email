@@ -95,7 +95,10 @@ function createIconButton(className, label, svg, onClick, { small } = {}) {
   const button = document.createElement("button");
   button.className = `bg-icon-button ${className}${small ? " bg-small" : ""}`;
   button.setAttribute("aria-label", label);
-  button.innerHTML = svg;
+  // Parsed rather than assigned via innerHTML, which add-on store linters flag.
+  button.append(
+    new DOMParser().parseFromString(svg, "text/html").body.firstChild,
+  );
   button.addEventListener("mouseenter", () => {
     clearTimeout(showTimer);
     showTimer = setTimeout(() => showTooltip(button), TOOLTIP_DELAY_MS);
