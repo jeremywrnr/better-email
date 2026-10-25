@@ -3,6 +3,7 @@ const { injectStyle } = require("./hideElements.js");
 // Values measured from Gmail's native "In new window" button and its tooltip.
 const TOOLTIP_DELAY_MS = 500;
 const TOOLTIP_GAP_PX = 4;
+const VIEWPORT_MARGIN_PX = 4;
 
 let tooltip;
 let showTimer;
@@ -25,6 +26,13 @@ function setup() {
       vertical-align: middle;
     }
     .bg-icon-button svg { fill: currentColor; }
+    /* 28px variant for inline use; negative block margins keep it from
+       growing a 16px text line while staying centered on it. */
+    .bg-icon-button.bg-small {
+      width: 28px;
+      height: 28px;
+      margin: -6px 0 -6px 4px;
+    }
     .bg-icon-button::before {
       content: "";
       position: absolute;
@@ -67,8 +75,8 @@ function showTooltip(button) {
   const b = button.getBoundingClientRect();
   const t = tooltip.getBoundingClientRect();
   const left = Math.min(
-    Math.max(4, b.left + b.width / 2 - t.width / 2),
-    window.innerWidth - t.width - 4,
+    Math.max(VIEWPORT_MARGIN_PX, b.left + b.width / 2 - t.width / 2),
+    window.innerWidth - t.width - VIEWPORT_MARGIN_PX,
   );
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${b.top - t.height - TOOLTIP_GAP_PX}px`;
@@ -81,11 +89,11 @@ function hideTooltip() {
 }
 
 // Round icon button styled like Gmail's own, with a hover state layer and a
-// dark tooltip above it.
-function createIconButton(className, label, svg) {
+// dark tooltip above it. Clicks don't reach Gmail's handlers underneath.
+function createIconButton(className, label, svg, onClick, { small } = {}) {
   if (!tooltip) setup();
   const button = document.createElement("button");
-  button.className = `bg-icon-button ${className}`;
+  button.className = `bg-icon-button ${className}${small ? " bg-small" : ""}`;
   button.setAttribute("aria-label", label);
   button.innerHTML = svg;
   button.addEventListener("mouseenter", () => {
@@ -93,7 +101,12 @@ function createIconButton(className, label, svg) {
     showTimer = setTimeout(() => showTooltip(button), TOOLTIP_DELAY_MS);
   });
   button.addEventListener("mouseleave", hideTooltip);
-  button.addEventListener("click", hideTooltip);
+  button.addEventListener("click", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    hideTooltip();
+    onClick();
+  });
   return button;
 }
 

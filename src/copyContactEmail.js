@@ -15,15 +15,15 @@ function addCopyContactEmailButtons() {
       "bg-copy-email",
       "Copy email address",
       COPY_ICON,
+      () => copyWithToast(email, "Email"),
+      { small: true },
     );
-    // Smaller than the 40px default, centered on the 16px address line.
-    button.style.cssText = "width: 28px; height: 28px; top: -6px; margin-left: 4px;";
-    button.addEventListener("click", (e) => {
-      e.stopPropagation();
-      e.preventDefault();
-      copyWithToast(email, "Email");
-    });
     card.after(button);
+    // Lay out envelope, address and button as one row so a long (truncated)
+    // address can't push the button onto its own line.
+    card.parentElement.style.cssText += "display: flex; align-items: center;";
+    card.style.cssText += "display: flex; align-items: center; min-width: 0;";
+    card.querySelector("div.Cz").style.minWidth = "0";
   });
 }
 

@@ -1,5 +1,6 @@
 function injectStyle(css) {
   const style = document.createElement("style");
+  style.dataset.betterEmail = ""; // lets tests tell the extension is active
   style.textContent = css;
   document.head.appendChild(style);
 }

@@ -32,14 +32,15 @@ function addCopyPermalinkButton() {
     return;
   }
 
-  const button = createIconButton("bg-permalink", "Copy permalink", LINK_ICON);
-  button.addEventListener("click", (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    const link = getPermalink();
-    if (link) copyWithToast(link, "Link");
-  });
-
+  const button = createIconButton(
+    "bg-permalink",
+    "Copy permalink",
+    LINK_ICON,
+    () => {
+      const link = getPermalink();
+      if (link) copyWithToast(link, "Link");
+    },
+  );
   newWindow.before(button);
 }
 
