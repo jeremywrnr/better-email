@@ -30,6 +30,7 @@ const {
 const { expandCollapsedMessages } = require("./autoExpand.js");
 const { DEFAULTS } = require("./defaults.js");
 const { injectStyle } = require("./hideElements.js");
+const { storage } = require("./browserApi.js");
 
 log("Extension Loading...", window.location.href);
 
@@ -52,7 +53,7 @@ let clickToFilterInterval;
 async function init() {
   // Fix Gmail bug: sender name descenders clipped in search header
   injectStyle(".c5 { overflow: visible !important; }");
-  const settings = await browser.storage.local.get(DEFAULTS);
+  const settings = await storage.local.get(DEFAULTS);
   log("Settings", settings);
 
   if (settings.profileHover) {

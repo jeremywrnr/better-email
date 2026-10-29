@@ -16,4 +16,6 @@ const DEFAULTS = {
   autoExpandThreads: true,
 };
 
-module.exports = { DEFAULTS };
+if (typeof module !== "undefined") {
+  module.exports = { DEFAULTS };
+}

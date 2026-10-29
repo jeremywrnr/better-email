@@ -1,20 +1,4 @@
-const DEFAULTS = {
-  clickToFilter: true,
-  domainMode: true,
-  profileHover: true,
-  clickToCopy: true,
-  alwaysShowEmail: true,
-  hideGemini: true,
-  hideEmojiReaction: true,
-  deleteSpamButton: true,
-  hideStorageUsed: true,
-  hideAIOverview: true,
-  hideFooterLinks: true,
-  hideSuggestedReplies: true,
-  hideSupportButton: true,
-  hideUpgradeButton: true,
-  autoExpandThreads: true,
-};
+const storage = globalThis.browser?.storage ?? chrome.storage;
 
 const keys = Object.keys(DEFAULTS);
 
@@ -26,7 +10,7 @@ function updateToggleLabel() {
 }
 
 async function load() {
-  const settings = await browser.storage.local.get(DEFAULTS);
+  const settings = await storage.local.get(DEFAULTS);
   for (const key of keys) {
     document.getElementById(key).checked = settings[key];
   }
@@ -38,7 +22,7 @@ async function save() {
   for (const key of keys) {
     settings[key] = document.getElementById(key).checked;
   }
-  await browser.storage.local.set(settings);
+  await storage.local.set(settings);
   updateToggleLabel();
   const status = document.getElementById("status");
   status.textContent = "Saved.";
