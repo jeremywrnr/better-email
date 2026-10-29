@@ -4,9 +4,13 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   mode: "production",
-  entry: "./src/content.js",
+  entry: {
+    content: "./src/content.js",
+    // Runs at document_start; kept separate so it stays small.
+    loading: "./src/loadingStatus.js",
+  },
   output: {
-    filename: "content.bundle.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
   },
   module: {

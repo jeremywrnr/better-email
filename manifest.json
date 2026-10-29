@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Better Email",
-  "version": "1.2.1",
-  "description": "Extension for Gmail: in a conversation, click a subject profile image to view all conversations with that subject",
+  "version": "1.4.0",
+  "description": "Declutter Gmail: hide Gemini, AI summaries and other clutter. Copy conversation links and sender addresses.",
   "permissions": ["storage"],
   "options_ui": {
     "page": "options.html",
@@ -15,6 +15,11 @@
     {
       "matches": ["https://mail.google.com/*"],
       "js": ["dist/content.bundle.js"]
+    },
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["dist/loading.bundle.js"],
+      "run_at": "document_start"
     }
   ],
   "browser_specific_settings": {
