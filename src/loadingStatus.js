@@ -1,6 +1,6 @@
+require("./browserShim.js");
 const { log } = require("./log.js");
 const { DEFAULTS } = require("./defaults.js");
-const { storage } = require("./browserApi.js");
 
 // Gmail's splash (#loading) keeps its logo hidden for 1.25s and its progress
 // bar (#nlpt) for 2.5s, but shows "If you're having trouble loading…" (#stb-msg)
@@ -127,6 +127,6 @@ function setup() {
 // Only the top Gmail page has a splash; skip its iframes (the data frame etc.).
 // A plain promise, not async/await, keeps babel's runtime out of this bundle.
 if (window.top === window)
-  storage.local
+  browser.storage.local
     .get({ loadingStatus: DEFAULTS.loadingStatus })
     .then(({ loadingStatus }) => loadingStatus && setup());

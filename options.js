@@ -1,5 +1,3 @@
-const storage = globalThis.browser?.storage ?? chrome.storage;
-
 const keys = Object.keys(DEFAULTS);
 
 function updateToggleLabel() {
@@ -10,7 +8,7 @@ function updateToggleLabel() {
 }
 
 async function load() {
-  const settings = await storage.local.get(DEFAULTS);
+  const settings = await browser.storage.local.get(DEFAULTS);
   for (const key of keys) {
     document.getElementById(key).checked = settings[key];
   }
@@ -22,7 +20,7 @@ async function save() {
   for (const key of keys) {
     settings[key] = document.getElementById(key).checked;
   }
-  await storage.local.set(settings);
+  await browser.storage.local.set(settings);
   updateToggleLabel();
   const status = document.getElementById("status");
   status.textContent = "Saved.";

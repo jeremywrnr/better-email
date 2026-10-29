@@ -1,3 +1,4 @@
+require("./browserShim.js");
 const { log } = require("./log.js");
 const {
   wrapImageWithSubjectLink,
@@ -25,7 +26,6 @@ const { expandCollapsedMessages } = require("./autoExpand.js");
 const { addCopyPermalinkButton } = require("./copyPermalink.js");
 const { addCopyContactEmailButtons } = require("./copyContactEmail.js");
 const { DEFAULTS } = require("./defaults.js");
-const { storage } = require("./browserApi.js");
 
 log("Extension Loading...", window.location.href);
 
@@ -48,7 +48,7 @@ let clickToFilterInterval;
 async function init() {
   // Fix Gmail bug: sender name descenders clipped in search header
   injectStyle(".c5 { overflow: visible !important; }");
-  const settings = await storage.local.get(DEFAULTS);
+  const settings = await browser.storage.local.get(DEFAULTS);
   log("Settings", settings);
 
   if (settings.profileHover) {
