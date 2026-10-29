@@ -1,3 +1,4 @@
+require("./browserShim.js");
 const { log } = require("./log.js");
 const {
   wrapImageWithSubjectLink,

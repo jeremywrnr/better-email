@@ -1,16 +1,16 @@
 # Better Email
 
-A Firefox extension that declutters Gmail — removes AI features, hides distractions, and adds useful navigation shortcuts. All features are individually configurable.
+A Firefox and Chrome extension that declutters Gmail: removes AI features, hides distractions, and adds useful navigation shortcuts. All features are individually configurable.
 
 ![Click a Gmail profile image to filter by all conversations](./media/clickToFilter.gif)
 
 ## What it does
 
-**Clean up** — Hide AI Overview summaries, suggested replies, Gemini buttons, emoji reactions, support button, side panel, "Print all" button, footer clutter, and storage usage.
+**Clean up**: Hide AI Overview summaries, suggested replies, Gemini buttons, emoji reactions, support button, side panel, "Print all" button, footer clutter, and storage usage.
 
-**Navigate faster** — Click sender names to filter by address, click profile images to filter by sender or domain, auto-expand long threads, copy email addresses with one click (or from the search contact card), copy a permalink to any conversation.
+**Navigate faster**: Click sender names to filter by address, click profile images to filter by sender or domain, auto-expand long threads, copy email addresses with one click (or from the search contact card), copy a permalink to any conversation.
 
-**Load without the blank page:** while Gmail starts, show its logo and a progress bar that follows the real load (fetching your mailbox, then starting Gmail) instead of a blank page with a "having trouble loading?" link.
+**Load without the blank page**: while Gmail starts, show its logo and a progress bar that follows the real load (fetching your mailbox, then starting Gmail) instead of a blank page with a "having trouble loading?" link.
 
 ## Privacy
 
@@ -21,7 +21,8 @@ Runs entirely in your browser. No data collected, no network requests, nothing l
 ```
 npm install        # install dependencies
 npm run build      # build and watch for changes
-npm run start      # run with web-ext (auto-reloads)
+npm run start      # run in Firefox with web-ext (auto-reloads)
+npm run start:chrome # run in Chrome with web-ext (auto-reloads)
 npm run publish    # production zip for addons.mozilla.org
 npm run check      # check formatting
 npm run fix        # fix formatting
